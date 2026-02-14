@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion';
 import { Link, useParams, Navigate } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { getProjectById } from '@/data/portfolioData';
-import { ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { useContent } from '@/contexts/ContentContext';
+import { ArrowLeft, CheckCircle2, ExternalLink } from 'lucide-react';
 
 export const PortfolioDetailPage = () => {
   const { projectId } = useParams<{ projectId: string }>();
-  const project = projectId ? getProjectById(projectId) : undefined;
+  const { content } = useContent();
+  const project = projectId ? content.portfolioProjects.find(p => p.id === projectId) : undefined;
 
   if (!project) {
     return <Navigate to="/portfolio" replace />;
@@ -60,6 +61,19 @@ export const PortfolioDetailPage = () => {
                   ))}
                 </div>
               </div>
+              {project.projectUrl && (
+                <div className="mt-6">
+                  <a
+                    href={project.projectUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-blue-950 text-white font-bold px-6 py-3 rounded-full hover:bg-blue-900 transition-colors"
+                  >
+                    <ExternalLink className="h-5 w-5" />
+                    Projekt-Website besuchen
+                  </a>
+                </div>
+              )}
             </motion.div>
 
             <motion.div

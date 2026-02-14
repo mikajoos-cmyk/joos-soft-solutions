@@ -1,16 +1,20 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { SEO } from '@/components/SEO';
-import { portfolioProjects } from '@/data/portfolioData';
+import { useContent } from '@/contexts/ContentContext';
 import { ArrowRight } from 'lucide-react';
 
 export const PortfolioPage = () => {
+  const { content } = useContent();
+  const portfolioProjects = content.portfolioProjects;
+
   return (
     <>
       <SEO 
         title="Portfolio"
-        description="Entdecken Sie unsere realisierten Projekte - Von Verwaltungssystemen über Desktop-Anwendungen bis hin zu Datenanalyse-Tools. Erfolgreiche Softwarelösungen für verschiedene Branchen."
-        keywords="Portfolio, Projekte, Referenzen, Kundenprojekte, Softwareprojekte"
+        description="Entdecken Sie unsere realisierten Projekte aus Dettingen - Von Verwaltungssystemen über Desktop-Anwendungen bis hin zu Datenanalyse-Tools. Erfolgreiche Softwarelösungen für Unternehmen in der Region Reutlingen, Stuttgart und deutschlandweit."
+        keywords="Portfolio Softwareentwicklung, Projekte Dettingen, Referenzen IT Dienstleistung, Kundenprojekte Reutlingen, Softwareprojekte Baden-Württemberg"
+        canonical="https://www.joos-soft-solutions.de/portfolio"
       />
       <div className="box-border caret-transparent max-w-none w-full mx-auto px-6 py-8 md:max-w-screen-xl md:py-16">
         <motion.section 

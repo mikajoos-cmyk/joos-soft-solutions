@@ -12,8 +12,9 @@ export const HomePage = () => {
     <>
       <SEO 
         title="Startseite"
-        description="Joos Soft Solutions - Maßgeschneiderte Full-Stack Web-Apps, effiziente Desktop-Anwendungen und intelligente Prozessautomatisierung für Ihr Unternehmen."
-        keywords="Softwareentwicklung, Web-Apps, Desktop-Anwendungen, Prozessautomatisierung, Python, React, Full-Stack"
+        description="Joos Soft Solutions aus Dettingen - Maßgeschneiderte Full-Stack Web-Apps, effiziente Desktop-Anwendungen und intelligente Prozessautomatisierung für Ihr Unternehmen in der Region Reutlingen, Stuttgart und Ermstal."
+        keywords="Softwareentwicklung Dettingen, IT Dienstleistung Ermstal, App Entwicklung Reutlingen, Web-Apps Stuttgart, Desktop-Anwendungen, Prozessautomatisierung, Python Entwickler, React Entwickler, Full-Stack Entwickler Baden-Württemberg"
+        canonical="https://www.joos-soft-solutions.de/"
       />
       <div className="box-border caret-transparent max-w-none w-full mx-auto px-6 py-8 md:max-w-screen-xl md:py-16">
         <section id="home" className="box-border caret-transparent">

@@ -10,6 +10,7 @@ export type PortfolioProject = {
   challenge: string;
   solution: string;
   results: string[];
+  projectUrl?: string;
   screenshots?: string[];
   clientTestimonial?: {
     quote: string;

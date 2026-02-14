@@ -1,0 +1,9 @@
+# robots.txt for Joos Soft Solutions
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://www.joos-soft-solutions.de/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1

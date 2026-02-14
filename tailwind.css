@@ -1,5 +1,21 @@
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Global optimizations - remove redundant classes */
+* {
+  box-sizing: border-box;
+}
+
+/* Hide caret only for non-input elements */
+body, div, span, p, h1, h2, h3, h4, h5, h6, a, button, img {
+  caret-color: transparent;
+}
+
+/* Ensure caret is visible in input fields */
+input, textarea, [contenteditable="true"] {
+  caret-color: auto !important;
+}
 
 @font-face {
   font-family: 'Inter';
@@ -28,8 +44,6 @@
   font-weight: 800;
   font-style: normal;
 }
-
-@tailwind base;
 
 @layer base {
   :root {

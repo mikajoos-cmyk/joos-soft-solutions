@@ -6,8 +6,9 @@ export const ImpressumPage = () => {
     <>
       <SEO 
         title="Impressum"
-        description="Impressum und rechtliche Informationen von Joos Soft Solutions - Mika Joos, Listweg 4, 72581 Dettingen."
-        keywords="Impressum, Rechtliches, Kontaktdaten"
+        description="Impressum und rechtliche Informationen von Joos Soft Solutions - Mika Joos, Listweg 4, 72581 Dettingen, Deutschland. Umsatzsteuer-ID: 89516/03232"
+        keywords="Impressum Joos Soft Solutions, Rechtliches, Kontaktdaten Dettingen, Mika Joos Impressum"
+        canonical="https://www.joos-soft-solutions.de/impressum"
       />
       <div className="box-border caret-transparent max-w-none w-full mx-auto px-6 py-8 md:max-w-4xl md:py-16">
         <motion.section 

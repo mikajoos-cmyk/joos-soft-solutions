@@ -1,62 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-const testimonials = [
-  {
-    quote: "Mika hat hervorragende Arbeit geleistet! Ich hatte eine Excel-Tabelle als Grundlage und eine klare Vorstellung davon, wie mein Python-Programm aussehen sollte – und Mika hat meine Erwartungen mehr als nur erfüllt. Er hat meine Anforderungen perfekt umgesetzt, professionell gearbeitet und das Projekt mit großem Fachwissen realisiert. Die Kommunikation war reibungslos, die Umsetzung präzise, und das Endergebnis ist genau das, was ich mir gewünscht habe. Dank Mika weiß ich jetzt, dass meine Ideen tatsächlich in Programme umgesetzt werden können – eine Erkenntnis, die für mich unglaublich wertvoll ist! In Zukunft werde ich definitiv wieder mit ihm zusammenarbeiten. Absolut empfehlenswert – jederzeit wieder! Vielen Dank, Mika! 💯",
-    author: "nickel_15",
-    project: ""
-  },
-  {
-    quote: "He does his work absolutely great! A great professional who immediately understood the task we needed and nailed it with the first delivery to 100%. The code is working as expected and he's done a great job. We would hire him again any time!",
-    author: "cwbsl",
-    project: ""
-  },
-  {
-    quote: "Super Service! Auch nach der Lieferung 1A Service mit Video erklärungen, und immer wieder weiteren Hilfen. Code war einwandfrei. immer wieder empfehlbar👍🏼",
-    author: "dstore4you",
-    project: ""
-  },
-  {
-    quote: "Working with Mika was fantastic. He quickly and reliably met my requirements. Considering the short timeframe, I am very grateful that Mika took on the task and executed it very well.",
-    author: "kalirobot",
-    project: ""
-  },
-  {
-    quote: "Mika Exceeded Expectation! it was so pleasant to work with such a Proactive and skilled personen. There were numerous times where Mika could take the short route, but he never did, he was always seeking for the best solution for this project. I did several projects in several countries, but the way of communicating and the level of skills was so pleasant to work with, I could really count on Mika, knowing he delivers the highest standard, always seeking to exceed expectations. I will not seek further in the future, he's my one stop problem solver! Thanks Mike, I enjoyed this huge project the most of all projects I did in the past 17years!",
-    author: "excel758",
-    project: "Data Migration Tool"
-  },
-  {
-    quote: "He exceeded everything i asked for. The program is working like a charm and no issues. I will be using him in other program projects.",
-    author: "howrangi",
-    project: ""
-  },
-  {
-    quote: "I couldn't have imagined anyone better for this job. He finished faster than expected, great work and highly recommended! :)",
-    author: "danihegan",
-    project: ""
-  },
-  {
-    quote: "Amazing. I would recommend him to anyone. He is kind, respectful, and courteous. He helped me with several of my projects in a really good time frame. I appreciate all his work and if you're thinking of him, you won't regret his service.",
-    author: "jaymi234",
-    project: ""
-  },
-  {
-    quote: "Working with Mika is very relaxed, he understands in no-time what the goal of the program is and works accordingly. He also tests his program against the example output, which results in an almost flawless program.",
-    author: "gerardjanssen",
-    project: ""
-  },
-  {
-    quote: "Habe genau das bekommen, was ich wollte. Besonders hervorzuheben ist die schnelle, lösungsorientierte Kommunikation.",
-    author: "websail",
-    project: ""
-  }
-];
+import { useContent } from '@/contexts/ContentContext';
 
 export const TestimonialsCarousel = () => {
+  const { content } = useContent();
+  const testimonials = content.testimonials;
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Auto-play functionality
+  useEffect(() => {
+    if (isPaused || testimonials.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [isPaused, testimonials.length]);
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
@@ -67,7 +29,11 @@ export const TestimonialsCarousel = () => {
   };
 
   return (
-    <div className="relative box-border caret-transparent w-full overflow-hidden px-12">
+    <div 
+      className="relative box-border caret-transparent w-full overflow-hidden px-12"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
@@ -127,6 +93,22 @@ export const TestimonialsCarousel = () => {
       >
         <ChevronRight className="h-6 w-6" />
       </button>
+
+      {/* Progress Indicators */}
+      <div className="flex justify-center gap-2 mt-6">
+        {testimonials.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentIndex(index)}
+            className={`h-2 rounded-full transition-all ${
+              index === currentIndex 
+                ? 'w-8 bg-teal-500' 
+                : 'w-2 bg-gray-300 hover:bg-gray-400'
+            }`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
     </div>
   );
 };

@@ -7,8 +7,9 @@ export const ServicesPage = () => {
     <>
       <SEO 
         title="Dienstleistungen"
-        description="Full-Stack Webanwendungen, Desktop-App Entwicklung, Prozessautomatisierung, Data Science & Analyse, Software-Integrationen - Innovative Lösungen für Ihre Geschäftsprozesse."
-        keywords="Webanwendungen, Desktop Apps, Automatisierung, Data Science, Software Integration, Flask, Django, React"
+        description="Full-Stack Webanwendungen, Desktop-App Entwicklung, Prozessautomatisierung, Data Science & Analyse, Software-Integrationen - Innovative IT-Lösungen für Unternehmen in Dettingen, Reutlingen, Stuttgart und Umgebung."
+        keywords="Webanwendungen Reutlingen, Desktop Apps Entwicklung, Automatisierung Stuttgart, Data Science Dettingen, Software Integration, Flask, Django, React, Python Entwicklung Baden-Württemberg"
+        canonical="https://www.joos-soft-solutions.de/services"
       />
       <div className="box-border caret-transparent max-w-none w-full mx-auto px-6 py-8 md:max-w-screen-xl md:py-16">
         <motion.section 

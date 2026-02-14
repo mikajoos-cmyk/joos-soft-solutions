@@ -8,8 +8,9 @@ export const ContactPage = () => {
     <>
       <SEO 
         title="Kontakt"
-        description="Kontaktieren Sie Joos Soft Solutions für Ihr nächstes Softwareprojekt. Wir freuen uns auf Ihre Nachricht und beraten Sie gerne."
-        keywords="Kontakt, Anfrage, Beratung, Softwareentwicklung Anfrage"
+        description="Kontaktieren Sie Joos Soft Solutions in Dettingen für Ihr nächstes Softwareprojekt. Kostenlose Erstberatung für Unternehmen in Reutlingen, Stuttgart und Umgebung. Telefon: 01633058605"
+        keywords="Kontakt Softwareentwicklung Dettingen, IT Beratung Reutlingen, Softwareentwicklung Anfrage Stuttgart, Erstberatung Ermstal, Mika Joos Kontakt"
+        canonical="https://www.joos-soft-solutions.de/contact"
       />
       <div className="box-border caret-transparent max-w-none w-full mx-auto px-6 py-8 md:max-w-screen-xl md:py-16">
         <motion.section 
@@ -63,19 +64,20 @@ export const ContactPage = () => {
                     <Phone className="h-6 w-6 flex-shrink-0 mt-1" />
                     <div>
                       <h3 className="font-bold mb-1">Telefon</h3>
-                      <a href="tel:01633058605" className="hover:underline opacity-90">
-                        01633058605
+                      <a href="tel:+4901633058605" className="hover:underline opacity-90">
+                        +49 163 3058605
                       </a>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
                     <MapPin className="h-6 w-6 flex-shrink-0 mt-1" />
                     <div>
-                      <h3 className="font-bold mb-1">Adresse</h3>
+                      <h3 className="font-bold mb-1">Standort</h3>
                       <p className="opacity-90">
                         Listweg 4<br />
-                        72581 Dettingen<br />
-                        Deutschland
+                        72581 Dettingen an der Erms<br />
+                        Region Reutlingen / Stuttgart<br />
+                        Baden-Württemberg, Deutschland
                       </p>
                     </div>
                   </div>
