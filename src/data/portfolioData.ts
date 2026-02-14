@@ -11,11 +11,7 @@ export type PortfolioProject = {
   solution: string;
   results: string[];
   projectUrl?: string;
-  screenshots?: string[];
-  clientTestimonial?: {
-    quote: string;
-    author: string;
-  };
+  createdAt?: string;
 };
 
 export const portfolioProjects: PortfolioProject[] = [

@@ -55,8 +55,8 @@ export const ContactPage = () => {
                     <Mail className="h-6 w-6 flex-shrink-0 mt-1" />
                     <div>
                       <h3 className="font-bold mb-1">E-Mail</h3>
-                      <a href="mailto:kontakt@joos-soft-solutions.de" className="hover:underline opacity-90">
-                        kontakt@joos-soft-solutions.de
+                      <a href="mailto:mika.joos@joos-soft-solutions.de" className="hover:underline opacity-90">
+                        mika.joos@joos-soft-solutions.de
                       </a>
                     </div>
                   </div>

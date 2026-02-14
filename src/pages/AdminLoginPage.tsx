@@ -12,14 +12,15 @@ export const AdminLoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    if (login(username, password)) {
+    const { error } = await login(username, password);
+    if (!error) {
       navigate('/admin/dashboard');
     } else {
-      setError('Ungültige Anmeldedaten. Bitte versuchen Sie es erneut.');
+      setError('Ungültige Anmeldedaten: ' + error.message);
     }
   };
 
@@ -58,18 +59,18 @@ export const AdminLoginPage = () => {
 
             <div>
               <label htmlFor="username" className="block text-gray-700 font-bold mb-2">
-                Benutzername
+                E-Mail
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
                   id="username"
-                  type="text"
+                  type="email"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
-                  placeholder="admin"
+                  placeholder="admin@example.com"
                 />
               </div>
             </div>
@@ -100,10 +101,6 @@ export const AdminLoginPage = () => {
             </button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-gray-500">
-            <p>Standard-Zugangsdaten:</p>
-            <p className="font-mono mt-1">admin / JoosSoft2025!</p>
-          </div>
         </motion.div>
       </div>
     </>

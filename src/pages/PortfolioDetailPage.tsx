@@ -166,27 +166,8 @@ export const PortfolioDetailPage = () => {
           </motion.div>
 
           {/* Testimonial */}
-          {project.clientTestimonial && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="bg-white shadow-lg p-8 rounded-lg mb-12"
-            >
-              <img
-                src="https://c.animaapp.com/mlmelhdkAuv6uy/assets/icon-5.svg"
-                alt="Quote"
-                className="text-teal-500 box-border caret-transparent h-8 opacity-50 w-8 mb-4"
-              />
-              <p className="text-gray-700 italic text-lg box-border caret-transparent leading-8 mb-4">
-                &quot;{project.clientTestimonial.quote}&quot;
-              </p>
-              <p className="text-blue-950 font-bold">
-                — {project.clientTestimonial.author}
-              </p>
-            </motion.div>
-          )}
+          {/* Testimonials werden nun zentral über die Testimonials-Tabelle verwaltet, 
+              nicht mehr pro Projekt-ID in der portfolio_projects Tabelle. */}
 
           {/* CTA */}
           <motion.div

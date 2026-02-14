@@ -4,14 +4,16 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { useContent } from '@/contexts/ContentContext';
 import { SEO } from '@/components/SEO';
-import { LogOut, Briefcase, MessageSquare, Users, Plus, Edit2, Trash2, Save, X, ExternalLink } from 'lucide-react';
+import { LogOut, Briefcase, MessageSquare, Users, Plus, Edit2, Trash2, Save, X, ExternalLink, Loader2, Upload } from 'lucide-react';
 import { PortfolioProject } from '@/data/portfolioData';
+import { supabase } from '@/lib/supabaseClient';
+import { uploadImage } from '@/lib/storage';
 
 type TabType = 'portfolio' | 'testimonials' | 'companies';
 
 export const AdminDashboardPage = () => {
   const { isAuthenticated, logout } = useAuth();
-  const { content, updatePortfolioProjects, updateTestimonials, updateTrustedCompanies } = useContent();
+  const { content, loading, updatePortfolioProjects, updateTestimonials, updateTrustedCompanies } = useContent();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabType>('portfolio');
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -30,6 +32,14 @@ export const AdminDashboardPage = () => {
 
   if (!isAuthenticated) {
     return null;
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Loader2 className="h-12 w-12 text-teal-500 animate-spin" />
+      </div>
+    );
   }
 
   return (
@@ -138,6 +148,22 @@ export const AdminDashboardPage = () => {
 // Portfolio Manager Component
 const PortfolioManager = ({ projects, onUpdate, editingId, setEditingId, showAddForm, setShowAddForm }: any) => {
   const [formData, setFormData] = useState<Partial<PortfolioProject>>({});
+  const [uploading, setUploading] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      setUploading(true);
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const url = await uploadImage(file, 'portfolio');
+      setFormData({ ...formData, imageUrl: url });
+    } catch (error: any) {
+      alert('Upload fehlgeschlagen: ' + error.message);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleAdd = () => {
     setFormData({
@@ -164,20 +190,49 @@ const PortfolioManager = ({ projects, onUpdate, editingId, setEditingId, showAdd
     setShowAddForm(false);
   };
 
-  const handleSave = () => {
-    if (showAddForm) {
-      onUpdate([...projects, formData as PortfolioProject]);
-    } else {
-      onUpdate(projects.map((p: PortfolioProject) => p.id === editingId ? formData : p));
+  const handleSave = async () => {
+    try {
+      // Map camelCase to snake_case for DB
+      const dbData = {
+        id: formData.id,
+        title: formData.title,
+        short_description: formData.shortDescription,
+        full_description: formData.fullDescription,
+        image_url: formData.imageUrl,
+        category: formData.category,
+        technologies: formData.technologies,
+        features: formData.features,
+        challenge: formData.challenge,
+        solution: formData.solution,
+        results: formData.results,
+        project_url: formData.projectUrl
+      };
+
+      if (showAddForm) {
+        const { error } = await supabase.from('portfolio_projects').insert([dbData]);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from('portfolio_projects').update(dbData).eq('id', editingId);
+        if (error) throw error;
+      }
+      onUpdate([]); // Trigger refresh in context
+      setEditingId(null);
+      setShowAddForm(false);
+      setFormData({});
+    } catch (error: any) {
+      alert('Fehler beim Speichern: ' + error.message);
     }
-    setEditingId(null);
-    setShowAddForm(false);
-    setFormData({});
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('Möchten Sie dieses Projekt wirklich löschen?')) {
-      onUpdate(projects.filter((p: PortfolioProject) => p.id !== id));
+      try {
+        const { error } = await supabase.from('portfolio_projects').delete().eq('id', id);
+        if (error) throw error;
+        onUpdate([]); // Trigger refresh in context
+      } catch (error: any) {
+        alert('Fehler beim Löschen: ' + error.message);
+      }
     }
   };
 
@@ -247,13 +302,43 @@ const PortfolioManager = ({ projects, onUpdate, editingId, setEditingId, showAdd
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-bold mb-2">Bild URL *</label>
-              <input
-                type="text"
-                value={formData.imageUrl || ''}
-                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:border-teal-500 focus:outline-none"
-              />
+              <label className="block text-gray-700 font-bold mb-2">Bild *</label>
+              <div className="flex flex-col gap-2">
+                {formData.imageUrl && (
+                  <img 
+                    src={formData.imageUrl} 
+                    alt="Preview" 
+                    className="h-32 w-full object-cover rounded-lg border border-gray-200" 
+                  />
+                )}
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    id="portfolio-image"
+                  />
+                  <label
+                    htmlFor="portfolio-image"
+                    className="flex items-center justify-center gap-2 w-full border-2 border-dashed border-gray-300 px-4 py-3 rounded-lg hover:border-teal-500 hover:text-teal-500 cursor-pointer transition-all"
+                  >
+                    {uploading ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <Upload className="h-5 w-5" />
+                    )}
+                    {formData.imageUrl ? 'Bild ändern' : 'Bild hochladen'}
+                  </label>
+                </div>
+                <input
+                  type="text"
+                  value={formData.imageUrl || ''}
+                  onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                  placeholder="Oder Bild URL eingeben"
+                  className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:border-teal-500 focus:outline-none text-sm"
+                />
+              </div>
             </div>
             <div>
               <label className="block text-gray-700 font-bold mb-2">Projekt URL / Website Link</label>
@@ -394,26 +479,48 @@ const TestimonialsManager = ({ testimonials, onUpdate, editingId, setEditingId, 
     setEditingId(null);
   };
 
-  const handleEdit = (index: number) => {
-    setFormData(testimonials[index]);
-    setEditingId(index.toString());
+  const handleEdit = (testimonial: any) => {
+    setFormData(testimonial);
+    setEditingId(testimonial.id);
     setShowAddForm(false);
   };
 
-  const handleSave = () => {
-    if (showAddForm) {
-      onUpdate([...testimonials, formData]);
-    } else {
-      onUpdate(testimonials.map((t: any, i: number) => i.toString() === editingId ? formData : t));
+  const handleSave = async () => {
+    try {
+      // Map camelCase to snake_case for DB (if applicable)
+      // Note: Testimonials fields are already quote, author, project in DB
+      
+      const dbData = {
+        quote: formData.quote,
+        author: formData.author,
+        project: formData.project
+      };
+
+      if (showAddForm) {
+        const { error } = await supabase.from('testimonials').insert([dbData]);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from('testimonials').update(dbData).eq('id', editingId);
+        if (error) throw error;
+      }
+      onUpdate([]);
+      setEditingId(null);
+      setShowAddForm(false);
+      setFormData({});
+    } catch (error: any) {
+      alert('Fehler beim Speichern: ' + error.message);
     }
-    setEditingId(null);
-    setShowAddForm(false);
-    setFormData({});
   };
 
-  const handleDelete = (index: number) => {
+  const handleDelete = async (id: string) => {
     if (confirm('Möchten Sie dieses Testimonial wirklich löschen?')) {
-      onUpdate(testimonials.filter((_: any, i: number) => i !== index));
+      try {
+        const { error } = await supabase.from('testimonials').delete().eq('id', id);
+        if (error) throw error;
+        onUpdate([]);
+      } catch (error: any) {
+        alert('Fehler beim Löschen: ' + error.message);
+      }
     }
   };
 
@@ -494,8 +601,8 @@ const TestimonialsManager = ({ testimonials, onUpdate, editingId, setEditingId, 
       )}
 
       <div className="grid grid-cols-1 gap-4">
-        {testimonials.map((testimonial: any, index: number) => (
-          <div key={index} className="bg-white rounded-lg shadow p-6">
+        {testimonials.map((testimonial: any) => (
+          <div key={testimonial.id} className="bg-white rounded-lg shadow p-6">
             <div className="flex items-start justify-between">
               <div className="flex-grow">
                 <p className="text-gray-700 italic mb-3">"{testimonial.quote}"</p>
@@ -506,13 +613,13 @@ const TestimonialsManager = ({ testimonials, onUpdate, editingId, setEditingId, 
               </div>
               <div className="flex gap-2 ml-4">
                 <button
-                  onClick={() => handleEdit(index)}
+                  onClick={() => handleEdit(testimonial)}
                   className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                 >
                   <Edit2 className="h-5 w-5" />
                 </button>
                 <button
-                  onClick={() => handleDelete(index)}
+                  onClick={() => handleDelete(testimonial.id)}
                   className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                 >
                   <Trash2 className="h-5 w-5" />
@@ -529,6 +636,22 @@ const TestimonialsManager = ({ testimonials, onUpdate, editingId, setEditingId, 
 // Companies Manager Component
 const CompaniesManager = ({ companies, onUpdate, editingId, setEditingId, showAddForm, setShowAddForm }: any) => {
   const [formData, setFormData] = useState<any>({});
+  const [uploading, setUploading] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      setUploading(true);
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const url = await uploadImage(file, 'companies');
+      setFormData({ ...formData, logoUrl: url });
+    } catch (error: any) {
+      alert('Upload fehlgeschlagen: ' + error.message);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleAdd = () => {
     setFormData({ name: '', logoUrl: '', websiteUrl: '' });
@@ -536,26 +659,46 @@ const CompaniesManager = ({ companies, onUpdate, editingId, setEditingId, showAd
     setEditingId(null);
   };
 
-  const handleEdit = (index: number) => {
-    setFormData(companies[index]);
-    setEditingId(index.toString());
+  const handleEdit = (company: any) => {
+    setFormData(company);
+    setEditingId(company.id);
     setShowAddForm(false);
   };
 
-  const handleSave = () => {
-    if (showAddForm) {
-      onUpdate([...companies, formData]);
-    } else {
-      onUpdate(companies.map((c: any, i: number) => i.toString() === editingId ? formData : c));
+  const handleSave = async () => {
+    try {
+      // Map camelCase to snake_case for DB
+      const dbData = {
+        name: formData.name,
+        logo_url: formData.logoUrl,
+        website_url: formData.websiteUrl
+      };
+
+      if (showAddForm) {
+        const { error } = await supabase.from('trusted_companies').insert([dbData]);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from('trusted_companies').update(dbData).eq('id', editingId);
+        if (error) throw error;
+      }
+      onUpdate([]);
+      setEditingId(null);
+      setShowAddForm(false);
+      setFormData({});
+    } catch (error: any) {
+      alert('Fehler beim Speichern: ' + error.message);
     }
-    setEditingId(null);
-    setShowAddForm(false);
-    setFormData({});
   };
 
-  const handleDelete = (index: number) => {
+  const handleDelete = async (id: string) => {
     if (confirm('Möchten Sie dieses Unternehmen wirklich löschen?')) {
-      onUpdate(companies.filter((_: any, i: number) => i !== index));
+      try {
+        const { error } = await supabase.from('trusted_companies').delete().eq('id', id);
+        if (error) throw error;
+        onUpdate([]);
+      } catch (error: any) {
+        alert('Fehler beim Löschen: ' + error.message);
+      }
     }
   };
 
@@ -598,13 +741,45 @@ const CompaniesManager = ({ companies, onUpdate, editingId, setEditingId, showAd
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-bold mb-2">Logo URL *</label>
-              <input
-                type="text"
-                value={formData.logoUrl || ''}
-                onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
-                className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:border-teal-500 focus:outline-none"
-              />
+              <label className="block text-gray-700 font-bold mb-2">Logo *</label>
+              <div className="flex flex-col gap-2">
+                {formData.logoUrl && (
+                  <div className="h-20 flex items-center justify-center p-2 bg-gray-50 rounded-lg border border-gray-200">
+                    <img 
+                      src={formData.logoUrl} 
+                      alt="Preview" 
+                      className="h-full w-auto object-contain" 
+                    />
+                  </div>
+                )}
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    id="company-logo"
+                  />
+                  <label
+                    htmlFor="company-logo"
+                    className="flex items-center justify-center gap-2 w-full border-2 border-dashed border-gray-300 px-4 py-3 rounded-lg hover:border-teal-500 hover:text-teal-500 cursor-pointer transition-all"
+                  >
+                    {uploading ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <Upload className="h-5 w-5" />
+                    )}
+                    {formData.logoUrl ? 'Logo ändern' : 'Logo hochladen'}
+                  </label>
+                </div>
+                <input
+                  type="text"
+                  value={formData.logoUrl || ''}
+                  onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
+                  placeholder="Oder Logo URL eingeben"
+                  className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:border-teal-500 focus:outline-none text-sm"
+                />
+              </div>
             </div>
             <div>
               <label className="block text-gray-700 font-bold mb-2">Website URL *</label>
@@ -636,8 +811,8 @@ const CompaniesManager = ({ companies, onUpdate, editingId, setEditingId, showAd
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {companies.map((company: any, index: number) => (
-          <div key={index} className="bg-white rounded-lg shadow p-6">
+        {companies.map((company: any) => (
+          <div key={company.id} className="bg-white rounded-lg shadow p-6">
             <div className="flex flex-col items-center text-center">
               <img
                 src={company.logoUrl}
@@ -655,13 +830,13 @@ const CompaniesManager = ({ companies, onUpdate, editingId, setEditingId, showAd
               </a>
               <div className="flex gap-2">
                 <button
-                  onClick={() => handleEdit(index)}
+                  onClick={() => handleEdit(company)}
                   className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                 >
                   <Edit2 className="h-5 w-5" />
                 </button>
                 <button
-                  onClick={() => handleDelete(index)}
+                  onClick={() => handleDelete(company.id)}
                   className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                 >
                   <Trash2 className="h-5 w-5" />

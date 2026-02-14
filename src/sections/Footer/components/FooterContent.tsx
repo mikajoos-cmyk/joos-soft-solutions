@@ -31,7 +31,7 @@ export const FooterContent = () => {
         </Link>
       </div>
       <p className="text-gray-400 text-sm box-border caret-transparent leading-5 mt-6">
-        © 2025 Joos Soft Solutions - Softwareentwicklung aus Dettingen an der Erms
+        © 2026 Joos Soft Solutions - Softwareentwicklung aus Dettingen an der Erms
       </p>
       <p className="text-gray-400 text-xs box-border caret-transparent leading-5 mt-2">
         Individuelle IT-Lösungen für Unternehmen in Reutlingen, Stuttgart und ganz Deutschland

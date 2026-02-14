@@ -28,6 +28,16 @@ export const TestimonialsCarousel = () => {
     setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
   };
 
+  if (testimonials.length === 0) {
+    return null; // Oder eine Lade-Komponente / Platzhalter
+  }
+
+  const testimonial = testimonials[currentIndex];
+
+  if (!testimonial) {
+    return null;
+  }
+
   return (
     <div 
       className="relative box-border caret-transparent w-full overflow-hidden px-12"
@@ -51,7 +61,7 @@ export const TestimonialsCarousel = () => {
                 className="text-teal-500 box-border caret-transparent h-8 opacity-50 w-8"
               />
               <p className="text-gray-700 italic box-border caret-transparent mt-4">
-                &quot;{testimonials[currentIndex].quote}&quot;
+                &quot;{testimonial.quote}&quot;
               </p>
             </div>
             <div className="box-border caret-transparent mt-6">
@@ -66,11 +76,11 @@ export const TestimonialsCarousel = () => {
                 ))}
               </div>
               <p className="text-blue-950 font-bold box-border caret-transparent mt-2">
-                {testimonials[currentIndex].author}
+                {testimonial.author}
               </p>
-              {testimonials[currentIndex].project && (
+              {testimonial.project && (
                 <p className="text-gray-500 text-sm box-border caret-transparent leading-5">
-                  {testimonials[currentIndex].project}
+                  {testimonial.project}
                 </p>
               )}
             </div>
