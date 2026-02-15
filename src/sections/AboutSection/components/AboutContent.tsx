@@ -11,7 +11,7 @@ export const AboutContent = () => {
         className="box-border caret-transparent col-end-auto col-start-auto md:col-end-[span_2] md:col-start-[span_2]"
       >
         <img
-          src="../../../../public/Porträtbild.jpg"
+          src="Porträtbild.jpg"
           alt="Porträt von Mika Joos, Gründer von Joos Soft Solutions"
           className="shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.1)_0px_10px_15px_-3px,rgba(0,0,0,0.1)_0px_4px_6px_-4px] box-border caret-transparent max-w-full mx-auto rounded-full"
         />
