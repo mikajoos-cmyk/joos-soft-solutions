@@ -18,7 +18,7 @@ export const HeroContent = () => {
         transition={{ duration: 0.6, delay: 0.3 }}
         className="text-blue-950 text-lg box-border caret-transparent leading-7 mt-4 md:text-xl"
       >
-        Von Mika Joos – Wir nehmen Ihnen Arbeit ab.
+          Ihr Experte für Softwareentwicklung aus Dettingen an der Erms.
       </motion.p>
       <motion.p 
         initial={{ opacity: 0, y: 20 }}
