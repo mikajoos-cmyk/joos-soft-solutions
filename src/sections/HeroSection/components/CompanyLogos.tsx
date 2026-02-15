@@ -16,6 +16,8 @@ export const CompanyLogos = () => {
                 transition={{ duration: 0.4, delay: index * 0.1 }}
                 whileHover={{ scale: 1.05 }}
                 href={company.websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="box-border caret-transparent block"
               >
                 <img
