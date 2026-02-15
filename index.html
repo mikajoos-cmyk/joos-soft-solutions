@@ -29,6 +29,7 @@
     {
       "@context": "https://schema.org",
       "@type": "ProfessionalService",
+      "@id": "https://www.joos-soft-solutions.de/#org",
       "name": "Joos Soft Solutions",
       "image": "https://www.joos-soft-solutions.de/logo_icon.png",
       "description": "Maßgeschneiderte Full-Stack Web-Apps, effiziente Desktop-Anwendungen und intelligente Prozessautomatisierung für Ihr Unternehmen.",
@@ -62,7 +63,11 @@
       },
       "founder": {
         "@type": "Person",
-        "name": "Mika Joos"
+        "@id": "https://www.joos-soft-solutions.de/#person",
+        "name": "Mika Joos",
+        "jobTitle": "Gründer & Full-Stack Entwickler",
+        "url": "https://www.joos-soft-solutions.de/#about",
+        "knowsAbout": ["Full-Stack Development", "Flask", "Django", "FastAPI", "React", "Python", "Prozessautomatisierung", "Desktop Application Development", "Data Science", "Datenmigration"]
       },
       "areaServed": {
         "@type": "GeoCircle",
@@ -75,6 +80,10 @@
       },
       "aggregateRating": {
         "@type": "AggregateRating",
+        "itemReviewed": {
+          "@type": "ProfessionalService",
+          "@id": "https://www.joos-soft-solutions.de/#org"
+        },
         "ratingValue": "4.8",
         "reviewCount": "100",
         "bestRating": "5",

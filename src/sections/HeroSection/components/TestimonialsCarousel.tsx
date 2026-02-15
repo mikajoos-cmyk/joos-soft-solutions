@@ -53,19 +53,31 @@ export const TestimonialsCarousel = () => {
           transition={{ duration: 0.3 }}
           className="w-full"
         >
-          <div className="bg-white shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.1)_0px_10px_15px_-3px,rgba(0,0,0,0.1)_0px_4px_6px_-4px] box-border caret-transparent flex flex-col h-full justify-between p-8 rounded-lg max-w-4xl mx-auto">
+          <div 
+            className="bg-white shadow-[rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0)_0px_0px_0px_0px,rgba(0,0,0,0.1)_0px_10px_15px_-3px,rgba(0,0,0,0.1)_0px_4px_6px_-4px] box-border caret-transparent flex flex-col h-full justify-between p-8 rounded-lg max-w-4xl mx-auto"
+            itemScope 
+            itemType="https://schema.org/Review"
+          >
+            <meta itemProp="itemReviewed" content="Joos Soft Solutions" />
             <div className="box-border caret-transparent">
               <img
                 src="https://c.animaapp.com/mlmelhdkAuv6uy/assets/icon-5.svg"
                 alt="Icon"
                 className="text-teal-500 box-border caret-transparent h-8 opacity-50 w-8"
               />
-              <p className="text-gray-700 italic box-border caret-transparent mt-4">
+              <p className="text-gray-700 italic box-border caret-transparent mt-4" itemProp="reviewBody">
                 &quot;{testimonial.quote}&quot;
               </p>
             </div>
             <div className="box-border caret-transparent mt-6">
-              <div className="items-center box-border caret-transparent flex">
+              <div 
+                className="items-center box-border caret-transparent flex"
+                itemProp="reviewRating" 
+                itemScope 
+                itemType="https://schema.org/Rating"
+              >
+                <meta itemProp="ratingValue" content="5" />
+                <meta itemProp="bestRating" content="5" />
                 {[...Array(5)].map((_, i) => (
                   <img
                     key={i}
@@ -75,8 +87,8 @@ export const TestimonialsCarousel = () => {
                   />
                 ))}
               </div>
-              <p className="text-blue-950 font-bold box-border caret-transparent mt-2">
-                {testimonial.author}
+              <p className="text-blue-950 font-bold box-border caret-transparent mt-2" itemProp="author" itemScope itemType="https://schema.org/Person">
+                <span itemProp="name">{testimonial.author}</span>
               </p>
               {testimonial.project && (
                 <p className="text-gray-500 text-sm box-border caret-transparent leading-5">
