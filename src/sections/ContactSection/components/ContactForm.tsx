@@ -16,22 +16,17 @@ export const ContactForm = () => {
     setErrorMessage('');
     
     try {
-      // EmailJS Integration - Replace with your actual EmailJS credentials
-      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      // Formspree Integration
+      const response = await fetch('https://formspree.io/f/xldwkwak', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify({
-          service_id: 'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-          template_id: 'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
-          user_id: 'YOUR_PUBLIC_KEY', // Replace with your EmailJS public key
-          template_params: {
-            from_name: formData.name,
-            from_email: formData.email,
-            message: formData.message,
-            to_email: 'kontakt@joos-soft-solutions.de'
-          }
+          name: formData.name,
+          email: formData.email,
+          message: formData.message
         })
       });
 
