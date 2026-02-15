@@ -10,7 +10,7 @@ type SEOProps = {
 
 export const SEO = ({ title, description, keywords, ogImage, canonical }: SEOProps) => {
   const fullTitle = `${title} | Joos Soft Solutions`;
-  const defaultImage = "https://www.joos-soft-solutions.de/og-image.jpg";
+  const defaultImage = "https://www.joos-soft-solutions.de/og-image.png";
   const baseUrl = "https://www.joos-soft-solutions.de";
   const canonicalUrl = canonical || `${baseUrl}${window.location.pathname}`;
 

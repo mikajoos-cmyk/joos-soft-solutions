@@ -8,7 +8,7 @@ Aktuell werden Bilder von `c.animaapp.com` geladen. Diese sollten lokal gehostet
 1. Laden Sie alle Bilder von den URLs herunter
 2. Speichern Sie sie im Ordner `public/img/`
 3. Ersetzen Sie alle URLs in den Komponenten durch lokale Pfade (z.B. `/img/icon.svg`)
-4. Erstellen Sie ein `og-image.jpg` (1200x630px) für Social Media Sharing
+4. Erstellen Sie ein `og-image.png` (1200x630px) für Social Media Sharing
 
 ### 2. EmailJS einrichten
 Das Kontaktformular benötigt EmailJS:
