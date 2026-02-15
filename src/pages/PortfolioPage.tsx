@@ -47,11 +47,11 @@ export const PortfolioPage = () => {
                     whileHover={{ y: -5 }}
                     className="bg-white shadow-lg box-border caret-transparent overflow-hidden rounded-lg transition-all h-full flex flex-col"
                   >
-                    <div className="relative overflow-hidden h-64">
+                    <div className="relative overflow-hidden h-64 bg-gray-50 flex items-center justify-center">
                       <img
                         src={project.imageUrl}
                         alt={project.title}
-                        className="box-border caret-transparent h-full w-full object-cover transition-transform duration-300 hover:scale-110"
+                        className="box-border caret-transparent h-full w-full object-contain transition-transform duration-300 hover:scale-110"
                       />
                       <div className="absolute top-4 right-4 bg-teal-500 text-white text-sm font-bold px-3 py-1 rounded-full">
                         {project.category}

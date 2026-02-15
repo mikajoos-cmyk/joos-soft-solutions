@@ -80,12 +80,12 @@ export const PortfolioDetailPage = () => {
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="relative overflow-hidden rounded-lg shadow-xl"
+              className="relative overflow-hidden rounded-lg shadow-xl bg-gray-50 flex items-center justify-center"
             >
               <img
                 src={project.imageUrl}
                 alt={project.title}
-                className="box-border caret-transparent w-full h-full object-cover"
+                className="box-border caret-transparent w-full h-full object-contain"
               />
             </motion.div>
           </div>
